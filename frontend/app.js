@@ -3,6 +3,9 @@ const STORAGE_KEYS = {
   backendMode: "kinetic_backend_mode",
   cloudBackendUrl: "kinetic_cloud_backend_url",
   activeTab: "kinetic_active_tab",
+  queueView: "kinetic_queue_view",
+  playlistBulkFormat: "kinetic_playlist_bulk_format",
+  playlistBulkQuality: "kinetic_playlist_bulk_quality",
 };
 
 const state = {
@@ -11,6 +14,9 @@ const state = {
   toastTimer: null,
   backendMode: localStorage.getItem(STORAGE_KEYS.backendMode) || "local",
   activeTab: localStorage.getItem(STORAGE_KEYS.activeTab) || "single",
+  queueView: localStorage.getItem(STORAGE_KEYS.queueView) || "card",
+  playlistBulkFormat: localStorage.getItem(STORAGE_KEYS.playlistBulkFormat) || "video",
+  playlistBulkQuality: localStorage.getItem(STORAGE_KEYS.playlistBulkQuality) || "720p (HD)",
   playlistMeta: null,
   backendStatus: "checking",
 };
@@ -24,6 +30,9 @@ const VIDEO_QUALITY_OPTIONS = [
 ];
 
 const AUDIO_QUALITIES = ["320 kbps (High)", "256 kbps (Standard)", "128 kbps (Mobile)"];
+
+const PLAYLIST_VIDEO_QUALITIES = ["4K (Ultra HD)", "1440p (QHD)", "1080p (Full HD)", "720p (HD)", "480p (SD)"];
+const PLAYLIST_AUDIO_QUALITIES = ["320 kbps (High)", "256 kbps (Standard)", "128 kbps (Mobile)"];
 
 const el = {
   backendModeSelect: document.getElementById("backendModeSelect"),
@@ -59,6 +68,13 @@ const el = {
   urlInput: document.getElementById("urlInput"),
   clearQueueButton: document.getElementById("clearQueueButton"),
   resetFormButton: document.getElementById("resetFormButton"),
+  queueCardViewButton: document.getElementById("queueCardViewButton"),
+  queueListViewButton: document.getElementById("queueListViewButton"),
+  playlistBulkFormatSelect: document.getElementById("playlistBulkFormatSelect"),
+  playlistBulkQualitySelect: document.getElementById("playlistBulkQualitySelect"),
+  helpToggleButton: document.getElementById("helpToggleButton"),
+  faqPanel: document.getElementById("faqPanel"),
+  faqCloseButton: document.getElementById("faqCloseButton"),
 };
 
 function uid() {
@@ -151,6 +167,65 @@ function setActiveTab(tab) {
   render();
 }
 
+function setQueueView(view) {
+  state.queueView = view === "list" ? "list" : "card";
+  localStorage.setItem(STORAGE_KEYS.queueView, state.queueView);
+  syncQueueViewControls();
+  render();
+}
+
+function toggleFaqPanel(forceOpen = null) {
+  if (!el.faqPanel) return;
+  const shouldOpen = forceOpen === null ? el.faqPanel.classList.contains("hidden") : forceOpen;
+  el.faqPanel.classList.toggle("hidden", !shouldOpen);
+}
+
+function setPlaylistBulkFormat(format) {
+  state.playlistBulkFormat = format === "audio" ? "audio" : "video";
+  if (state.playlistBulkFormat === "audio" && !state.playlistBulkQuality.toLowerCase().includes("kbps")) {
+    state.playlistBulkQuality = PLAYLIST_AUDIO_QUALITIES[0];
+  }
+  if (state.playlistBulkFormat === "video" && state.playlistBulkQuality.toLowerCase().includes("kbps")) {
+    state.playlistBulkQuality = PLAYLIST_VIDEO_QUALITIES[3];
+  }
+  localStorage.setItem(STORAGE_KEYS.playlistBulkFormat, state.playlistBulkFormat);
+  localStorage.setItem(STORAGE_KEYS.playlistBulkQuality, state.playlistBulkQuality);
+  syncPlaylistModControls();
+  applyPlaylistBulkMods();
+}
+
+function setPlaylistBulkQuality(quality) {
+  state.playlistBulkQuality = quality;
+  state.playlistBulkFormat = quality.toLowerCase().includes("kbps") ? "audio" : "video";
+  localStorage.setItem(STORAGE_KEYS.playlistBulkFormat, state.playlistBulkFormat);
+  localStorage.setItem(STORAGE_KEYS.playlistBulkQuality, quality);
+  syncPlaylistModControls();
+  applyPlaylistBulkMods();
+}
+
+function getPlaylistBulkQualityOptions(format) {
+  return format === "audio" ? PLAYLIST_AUDIO_QUALITIES : PLAYLIST_VIDEO_QUALITIES;
+}
+
+function syncPlaylistBulkQualityOptions() {
+  if (!el.playlistBulkQualitySelect) return;
+  const options = getPlaylistBulkQualityOptions(state.playlistBulkFormat);
+  const current = state.playlistBulkQuality;
+  el.playlistBulkQualitySelect.innerHTML = "";
+  for (const value of options) {
+    const option = document.createElement("option");
+    option.value = value;
+    option.textContent = value;
+    option.selected = value === current;
+    el.playlistBulkQualitySelect.appendChild(option);
+  }
+  if (!options.includes(current)) {
+    state.playlistBulkQuality = options[0];
+    localStorage.setItem(STORAGE_KEYS.playlistBulkQuality, state.playlistBulkQuality);
+    el.playlistBulkQualitySelect.value = state.playlistBulkQuality;
+  }
+}
+
 function syncBackendControls() {
   el.backendModeSelect.value = state.backendMode;
   const isLocal = state.backendMode === "local";
@@ -178,6 +253,36 @@ function syncTabControls() {
   el.selectAllPlaylistWrap.classList.toggle("hidden", state.activeTab !== "playlist");
   el.secondaryDownloadButton.classList.remove("hidden");
   el.activeQueueTitle.textContent = state.activeTab === "single" ? "ACTIVE QUEUE" : "PLAYLIST VIDEOS";
+}
+
+function syncQueueViewControls() {
+  el.queueCardViewButton.classList.toggle("active-view", state.queueView === "card");
+  el.queueListViewButton.classList.toggle("active-view", state.queueView === "list");
+  el.queueList.classList.toggle("queue-view-list", state.queueView === "list");
+}
+
+function syncPlaylistModControls() {
+  if (!el.playlistBulkFormatSelect || !el.playlistBulkQualitySelect) return;
+  el.playlistBulkFormatSelect.value = state.playlistBulkFormat;
+  syncPlaylistBulkQualityOptions();
+  el.playlistBulkQualitySelect.value = state.playlistBulkQuality;
+}
+
+function applyPlaylistBulkMods() {
+  const playlistItems = getPlaylistItems();
+  if (!playlistItems.length) {
+    render();
+    return;
+  }
+
+  playlistItems.forEach((item) => {
+    item.format = state.playlistBulkFormat;
+    item.quality = state.playlistBulkQuality;
+    if (item.format === "video") {
+      normalizeVideoQuality(item);
+    }
+  });
+  render();
 }
 
 function updateSummary() {
@@ -413,6 +518,7 @@ function render() {
   for (const item of visible) {
     el.queueList.appendChild(renderItem(item));
   }
+  syncQueueViewControls();
   updateSummary();
 }
 
@@ -473,7 +579,7 @@ async function hydrateMetadataForItems(items) {
       item.metadataError = error.message || "Metadata fetch failed.";
     });
     render();
-    showToast(error.message || "Metadata fetch nahi ho paya.", "error");
+    showToast(error.message || "Could not fetch metadata.", "error");
   }
 }
 
@@ -497,7 +603,7 @@ function addUrlsToQueue() {
     .filter(Boolean);
 
   if (!urls.length) {
-    showToast("At least one URL paste karo.", "error");
+    showToast("Please paste at least one URL.", "error");
     return;
   }
 
@@ -505,14 +611,14 @@ function addUrlsToQueue() {
   state.items.push(...newItems);
   el.urlInput.value = "";
   render();
-  showToast(`${urls.length} item queue mein add ho gaya.`);
+  showToast(`${urls.length} item${urls.length === 1 ? "" : "s"} added to the queue.`);
   hydrateMetadataForItems(newItems);
 }
 
 async function loadPlaylist() {
   const url = el.playlistUrlInput.value.trim();
   if (!url) {
-    showToast("Playlist URL paste karo.", "error");
+    showToast("Please paste a playlist URL.", "error");
     return;
   }
 
@@ -542,10 +648,12 @@ async function loadPlaylist() {
     state.activeTab = "playlist";
     localStorage.setItem(STORAGE_KEYS.activeTab, state.activeTab);
     syncTabControls();
+    syncPlaylistModControls();
+    applyPlaylistBulkMods();
     render();
     showToast(`Playlist loaded: ${playlist.title}`);
   } catch (error) {
-    showToast(error.message || "Playlist load nahi ho paya.", "error");
+    showToast(error.message || "Could not load the playlist.", "error");
   } finally {
     el.loadPlaylistButton.disabled = false;
     el.loadPlaylistButton.textContent = "Load Playlist";
@@ -571,7 +679,7 @@ function resetForm() {
   state.items = [];
   state.playlistMeta = null;
   clearQueue();
-  showToast("Form reset ho gaya.");
+  showToast("Form reset.");
 }
 
 function setPlaylistSelection(selected) {
@@ -646,9 +754,9 @@ async function downloadItems(items) {
       });
       pollJob(item.id, job.job_id);
     });
-    showToast(`${items.length} download request bhej diya gaya.`);
+    showToast(`${items.length} download request${items.length === 1 ? "" : "s"} sent.`);
   } catch (error) {
-    showToast(error.message || "Download start nahi ho paya.", "error");
+    showToast(error.message || "Could not start the download.", "error");
   }
 }
 
@@ -709,6 +817,8 @@ async function refreshBackendStatus() {
 function init() {
   prepareBackendMode();
   syncTabControls();
+  syncQueueViewControls();
+  syncPlaylistModControls();
   render();
   refreshBackendStatus();
   window.setInterval(refreshBackendStatus, 15000);
@@ -724,6 +834,18 @@ el.primaryDownloadButton.addEventListener("click", primaryDownload);
 el.secondaryDownloadButton.addEventListener("click", saveFilesToPc);
 el.backendModeSelect.addEventListener("change", (event) => setBackendMode(event.target.value));
 el.selectAllPlaylistCheckbox.addEventListener("change", (event) => setPlaylistSelection(event.target.checked));
+el.queueCardViewButton.addEventListener("click", () => setQueueView("card"));
+el.queueListViewButton.addEventListener("click", () => setQueueView("list"));
+el.playlistBulkFormatSelect.addEventListener("change", (event) => setPlaylistBulkFormat(event.target.value));
+el.playlistBulkQualitySelect.addEventListener("change", (event) => setPlaylistBulkQuality(event.target.value));
+el.helpToggleButton.addEventListener("click", () => toggleFaqPanel());
+el.faqCloseButton.addEventListener("click", () => toggleFaqPanel(false));
+
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape") {
+    toggleFaqPanel(false);
+  }
+});
 
 el.apiBaseInput.addEventListener("input", () => {
   if (state.backendMode === "cloud") {

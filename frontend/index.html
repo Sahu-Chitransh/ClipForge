@@ -3,12 +3,13 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Kinetic Utility | Pro Video Downloader</title>
+  <title>Clipforge | Pro Video Downloader</title>
   <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Manrope:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/png" href="/logo.png">
   <script>
     tailwind.config = {
       darkMode: "class",
@@ -51,7 +52,8 @@
   <header class="fixed top-0 z-50 w-full border-b border-outline-variant/15 bg-[#0c0e12]/70 px-6 py-4 backdrop-blur-xl">
     <div class="mx-auto flex max-w-7xl items-center justify-between gap-4">
       <div class="flex items-center gap-4">
-        <span class="font-headline text-xl font-bold uppercase tracking-[0.25em] text-primary">KINETIC UTILITY</span>
+        <img src="/logo.png" alt="Clipforge logo" class="h-10 w-10 rounded-full object-cover shadow-[0_0_22px_rgba(155,168,255,0.24)] ring-1 ring-white/10">
+        <span class="font-headline text-2xl font-bold uppercase tracking-[0.25em] text-primary">CLIPFORGE</span>
       </div>
       <div class="hidden items-center gap-8 font-headline tracking-tight md:flex">
         <a class="text-primary transition-colors duration-300 hover:text-tertiary" href="#">Downloader</a>
@@ -130,7 +132,27 @@
                 Load Playlist
               </button>
             </div>
-            <p class="text-xs text-on-surface-variant">Load the playlist first, then choose full playlist or selected videos from the sidebar.</p>
+            <div class="rounded-3xl border border-outline-variant/15 bg-surface-container-low p-4">
+              <div class="mb-3 flex items-center gap-2">
+                <span class="material-symbols-outlined text-primary">tune</span>
+                <h3 class="font-headline text-sm font-semibold uppercase tracking-widest text-on-surface-variant">Playlist Mod Menu</h3>
+              </div>
+              <div class="grid gap-4 md:grid-cols-2">
+                <div class="space-y-2">
+                  <label for="playlistBulkFormatSelect" class="text-xs uppercase tracking-widest text-on-surface-variant">Set format for all loaded links</label>
+                  <select id="playlistBulkFormatSelect" class="w-full rounded-xl border border-outline-variant/25 bg-surface-container-high px-4 py-3 text-sm text-on-surface focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary">
+                    <option value="video">Video</option>
+                    <option value="audio">Audio</option>
+                  </select>
+                </div>
+                <div class="space-y-2">
+                  <label for="playlistBulkQualitySelect" class="text-xs uppercase tracking-widest text-on-surface-variant">Set quality or bitrate for all</label>
+                  <select id="playlistBulkQualitySelect" class="w-full rounded-xl border border-outline-variant/25 bg-surface-container-high px-4 py-3 text-sm text-on-surface focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"></select>
+                </div>
+              </div>
+              <p class="mt-3 text-xs text-on-surface-variant">Choose a format first, then pick one preset to apply it to every playlist item.</p>
+            </div>
+            <p class="text-xs text-on-surface-variant">Load the playlist first, then choose the full playlist or selected videos from the sidebar.</p>
             <div class="rounded-2xl border border-outline-variant/15 bg-surface-container-low px-4 py-3 text-sm text-on-surface-variant">
               <span class="font-semibold text-on-surface">Audio note:</span>
               Audio downloads are saved as MP3 files with the thumbnail embedded directly into the file.
@@ -145,10 +167,22 @@
               <span id="activeQueueTitle">ACTIVE QUEUE</span>
               <span id="queueCount" class="rounded-full bg-surface-container px-2 py-0.5 text-sm font-normal text-on-surface-variant">0 ITEMS</span>
             </h2>
-            <button id="clearQueueButton" class="flex items-center gap-1 rounded-full px-3 py-1.5 text-sm font-label text-error transition-colors hover:bg-error/10">
-              <span class="material-symbols-outlined text-sm">delete_sweep</span>
-              Clear Queue
-            </button>
+            <div class="flex items-center gap-2">
+              <div class="queue-view-toggle flex rounded-full border border-outline-variant/20 bg-surface-container-low p-1">
+                <button id="queueCardViewButton" class="queue-view-button active-view flex items-center gap-1 rounded-full px-3 py-1.5 text-xs font-label font-semibold transition-colors" type="button">
+                  <span class="material-symbols-outlined text-sm">grid_view</span>
+                  Card
+                </button>
+                <button id="queueListViewButton" class="queue-view-button flex items-center gap-1 rounded-full px-3 py-1.5 text-xs font-label font-semibold transition-colors" type="button">
+                  <span class="material-symbols-outlined text-sm">view_list</span>
+                  List
+                </button>
+              </div>
+              <button id="clearQueueButton" class="flex items-center gap-1 rounded-full px-3 py-1.5 text-sm font-label text-error transition-colors hover:bg-error/10">
+                <span class="material-symbols-outlined text-sm">delete_sweep</span>
+                Clear Queue
+              </button>
+            </div>
           </div>
 
           <div id="playlistSummary" class="hidden rounded-2xl border border-outline-variant/15 bg-surface-container px-4 py-3 text-sm text-on-surface-variant"></div>
@@ -165,7 +199,8 @@
 
       <aside class="lg:sticky lg:top-24 h-fit space-y-4">
         <section class="rounded-3xl border border-outline-variant/15 bg-surface-container/95 p-5 shadow-[0_30px_60px_-30px_rgba(0,0,0,0.55)]">
-          <div class="mb-4 flex items-center gap-2">
+          <div class="mb-4 flex items-center gap-3">
+            <img src="/logo.png" alt="Clipforge logo" class="h-8 w-8 rounded-full object-cover ring-1 ring-white/10 shadow-[0_0_18px_rgba(155,168,255,0.18)]">
             <span class="material-symbols-outlined text-primary">tune</span>
             <h3 class="font-headline text-lg font-semibold">Actions</h3>
           </div>
@@ -230,6 +265,48 @@
       </aside>
     </div>
   </main>
+
+  <button id="helpToggleButton" class="help-fab fixed bottom-6 right-6 z-50 flex h-14 w-14 items-center justify-center rounded-full border border-primary/25 bg-[rgba(17,19,24,0.92)] text-primary shadow-[0_18px_40px_-18px_rgba(155,168,255,0.45)] transition-all hover:scale-105 hover:bg-[rgba(25,28,36,0.98)]" type="button" aria-label="Open help and FAQs">
+    <span class="material-symbols-outlined text-3xl">help</span>
+  </button>
+
+  <section id="faqPanel" class="faq-panel fixed bottom-24 right-6 z-50 hidden w-[min(92vw,420px)] rounded-3xl border border-outline-variant/15 bg-[rgba(12,14,18,0.96)] p-5 shadow-[0_30px_80px_-30px_rgba(0,0,0,0.7)] backdrop-blur-xl">
+    <div class="mb-4 flex items-center justify-between gap-3">
+      <div class="flex items-center gap-3">
+        <span class="material-symbols-outlined text-primary">help</span>
+        <div>
+          <h3 class="font-headline text-lg font-semibold">Help & FAQs</h3>
+          <p class="text-xs text-on-surface-variant">Quick fixes for common issues</p>
+        </div>
+      </div>
+      <button id="faqCloseButton" class="text-on-surface-variant transition-colors hover:text-error" type="button" aria-label="Close help panel">
+        <span class="material-symbols-outlined">close</span>
+      </button>
+    </div>
+
+    <div class="space-y-3 text-sm">
+      <details class="faq-item rounded-2xl border border-outline-variant/15 bg-surface-container-low px-4 py-3">
+        <summary class="cursor-pointer list-none font-semibold text-on-surface">Why does the backend show as offline?</summary>
+        <p class="mt-2 text-on-surface-variant">Select the correct URL in <code>Backend Source</code>. Local mode requires the backend to be running at <code>http://127.0.0.1:8000</code>, while cloud mode requires a valid HTTPS URL.</p>
+      </details>
+      <details class="faq-item rounded-2xl border border-outline-variant/15 bg-surface-container-low px-4 py-3">
+        <summary class="cursor-pointer list-none font-semibold text-on-surface">Why is the download not starting?</summary>
+        <p class="mt-2 text-on-surface-variant">Add the URL first and wait for metadata to load. Then use <code>Download to PC</code> or the item's <code>Download This</code> button. If it is a playlist, load the playlist first and then apply the bulk options.</p>
+      </details>
+      <details class="faq-item rounded-2xl border border-outline-variant/15 bg-surface-container-low px-4 py-3">
+        <summary class="cursor-pointer list-none font-semibold text-on-surface">Why are 4K or 1080p options missing?</summary>
+        <p class="mt-2 text-on-surface-variant">Those resolutions appear only when metadata shows that the video supports them. The dropdown automatically filters out unavailable qualities for low-resolution videos.</p>
+      </details>
+      <details class="faq-item rounded-2xl border border-outline-variant/15 bg-surface-container-low px-4 py-3">
+        <summary class="cursor-pointer list-none font-semibold text-on-surface">How is the thumbnail added to audio files?</summary>
+        <p class="mt-2 text-on-surface-variant">Audio downloads are converted to MP3 and the thumbnail is embedded directly into the file metadata. No zip file is created.</p>
+      </details>
+      <details class="faq-item rounded-2xl border border-outline-variant/15 bg-surface-container-low px-4 py-3">
+        <summary class="cursor-pointer list-none font-semibold text-on-surface">How do I apply the same settings to every playlist item?</summary>
+        <p class="mt-2 text-on-surface-variant">Use the <code>Playlist Mod Menu</code> in the playlist tab. As soon as you choose a format and quality from the dropdowns, those settings are applied to all loaded links.</p>
+      </details>
+    </div>
+  </section>
 
   <template id="queueItemTemplate">
     <article class="queue-card group relative overflow-hidden rounded-xl border-l-4 border-transparent bg-surface-container shadow-sm transition-all duration-300 hover:shadow-lg">

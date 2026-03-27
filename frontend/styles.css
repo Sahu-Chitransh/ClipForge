@@ -27,6 +27,16 @@ body {
   box-shadow: 0 0 0 1px rgba(155, 168, 255, 0.08) inset;
 }
 
+.queue-view-button {
+  color: #aaabb0;
+}
+
+.queue-view-button.active-view {
+  background: rgba(155, 168, 255, 0.16);
+  color: #f6f6fc;
+  box-shadow: 0 0 0 1px rgba(155, 168, 255, 0.1) inset;
+}
+
 .panel-card {
   background: rgba(23, 26, 31, 0.92);
   border: 1px solid rgba(70, 72, 77, 0.18);
@@ -42,6 +52,152 @@ body {
 
 .queue-card:hover {
   transform: translateY(-2px);
+}
+
+.queue-view-list {
+  gap: 0.45rem;
+}
+
+.queue-view-list .queue-card {
+  border-radius: 0.8rem;
+}
+
+.queue-view-list .queue-card > div {
+  flex-direction: row;
+}
+
+.queue-view-list .queue-card .item-thumbnail,
+.queue-view-list .queue-card .item-thumbnail-fallback {
+  width: 176px;
+  min-width: 176px;
+  height: 124px;
+}
+
+.queue-view-list .queue-card .item-thumbnail-fallback .material-symbols-outlined {
+  font-size: 2.8rem;
+}
+
+.queue-view-list .queue-card .item-meta {
+  display: none;
+}
+
+.queue-view-list .queue-card .flex-grow {
+  padding: 0.85rem 0.95rem 0.85rem 1rem;
+}
+
+.queue-view-list .queue-card .item-title {
+  font-size: 1rem;
+  line-height: 1.2;
+}
+
+.queue-view-list .queue-card .item-subtitle {
+  max-width: 100%;
+  font-size: 0.78rem;
+}
+
+.queue-view-list .queue-card .item-duration {
+  font-size: 9px;
+  padding: 0.2rem 0.35rem;
+}
+
+.queue-view-list .queue-card .item-status,
+.queue-view-list .queue-card .item-progress-text {
+  font-size: 9px;
+}
+
+.queue-view-list .queue-card .quality-select,
+.queue-view-list .queue-card .trim-toggle {
+  font-size: 11px;
+}
+
+.queue-view-list .queue-card .item-actions {
+  margin-top: 0.55rem;
+}
+
+.queue-view-list .queue-card .trim-grid {
+  padding-top: 0.75rem;
+  gap: 0.75rem;
+}
+
+.queue-view-list .queue-card .trim-grid input,
+.queue-view-list .queue-card .trim-grid label {
+  font-size: 10px;
+}
+
+.queue-view-list .queue-card .grid.grid-cols-1 {
+  gap: 0.55rem;
+}
+
+.queue-view-list .queue-card .grid.grid-cols-1.gap-4.sm\:grid-cols-2.lg\:grid-cols-4 {
+  gap: 0.35rem;
+}
+
+.queue-view-list .queue-card .item-select-wrap {
+  padding: 0.25rem 0.55rem;
+}
+
+.faq-panel details[open] {
+  border-color: rgba(155, 168, 255, 0.28);
+  background: rgba(25, 28, 36, 0.95);
+}
+
+.faq-panel summary::-webkit-details-marker {
+  display: none;
+}
+
+.help-fab {
+  transition: transform 160ms ease, box-shadow 160ms ease, background-color 160ms ease;
+}
+
+.help-fab:hover {
+  transform: translateY(-2px) scale(1.03);
+}
+
+.mod-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  border: 1px solid rgba(70, 72, 77, 0.3);
+  border-radius: 9999px;
+  background: rgba(17, 19, 24, 0.65);
+  color: #f6f6fc;
+  padding: 0.45rem 0.75rem;
+  font-size: 0.72rem;
+  font-family: "Inter", sans-serif;
+  cursor: pointer;
+  transition: background-color 160ms ease, border-color 160ms ease, transform 160ms ease;
+}
+
+.mod-chip:hover {
+  transform: translateY(-1px);
+  border-color: rgba(155, 168, 255, 0.3);
+}
+
+.mod-chip input {
+  accent-color: #9ba8ff;
+}
+
+body .mod-chip:has(input:checked) {
+  background: rgba(155, 168, 255, 0.16);
+  border-color: rgba(155, 168, 255, 0.38);
+  color: #cfd6ff;
+}
+
+@media (max-width: 767px) {
+  .queue-view-list .queue-card > div {
+    flex-direction: column;
+  }
+
+  .queue-view-list .queue-card .item-thumbnail,
+  .queue-view-list .queue-card .item-thumbnail-fallback {
+    width: 100%;
+    min-width: 0;
+    height: 10.5rem;
+  }
+
+  .queue-view-list .queue-card .flex-grow {
+    padding: 0.95rem;
+  }
 }
 
 .queue-card.border-primary {

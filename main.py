@@ -86,7 +86,7 @@ class JobRecord:
     served_at: Optional[float] = None
 
 
-app = FastAPI(title="YouTube Downloader API", version="1.0.0")
+app = FastAPI(title="Clipforge API", version="1.0.0")
 app.add_middleware(
     CORSMiddleware,
     allow_origins=ALLOWED_ORIGINS or ["*"],
@@ -488,7 +488,7 @@ async def process_download(job_id: str, item: DownloadItem) -> None:
                         "format": "jpg",
                     },
                     {
-                        "key": "FFmpegEmbedThumbnail",
+                        "key": "EmbedThumbnail",
                     }
                 ],
             }
@@ -589,6 +589,14 @@ async def serve_frontend() -> FileResponse:
     if not index_path.exists():
         raise HTTPException(status_code=404, detail="Frontend not found.")
     return FileResponse(index_path)
+
+
+@app.get("/logo.png")
+async def serve_logo() -> FileResponse:
+    logo_path = BASE_DIR / "logo.png"
+    if not logo_path.exists():
+        raise HTTPException(status_code=404, detail="Logo not found.")
+    return FileResponse(logo_path, media_type="image/png")
 
 
 @app.post("/api/download")
