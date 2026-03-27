@@ -579,7 +579,7 @@ async function hydrateMetadataForItems(items) {
       item.metadataError = error.message || "Metadata fetch failed.";
     });
     render();
-    showToast(error.message || "Could not fetch metadata.", "error");
+    showToast(error.message || "Metadata fetch nahi ho paya.", "error");
   }
 }
 
@@ -603,7 +603,7 @@ function addUrlsToQueue() {
     .filter(Boolean);
 
   if (!urls.length) {
-    showToast("Please paste at least one URL.", "error");
+    showToast("At least one URL paste karo.", "error");
     return;
   }
 
@@ -611,14 +611,14 @@ function addUrlsToQueue() {
   state.items.push(...newItems);
   el.urlInput.value = "";
   render();
-  showToast(`${urls.length} item${urls.length === 1 ? "" : "s"} added to the queue.`);
+  showToast(`${urls.length} item queue mein add ho gaya.`);
   hydrateMetadataForItems(newItems);
 }
 
 async function loadPlaylist() {
   const url = el.playlistUrlInput.value.trim();
   if (!url) {
-    showToast("Please paste a playlist URL.", "error");
+    showToast("Playlist URL paste karo.", "error");
     return;
   }
 
@@ -653,7 +653,7 @@ async function loadPlaylist() {
     render();
     showToast(`Playlist loaded: ${playlist.title}`);
   } catch (error) {
-    showToast(error.message || "Could not load the playlist.", "error");
+    showToast(error.message || "Playlist load nahi ho paya.", "error");
   } finally {
     el.loadPlaylistButton.disabled = false;
     el.loadPlaylistButton.textContent = "Load Playlist";
@@ -679,7 +679,7 @@ function resetForm() {
   state.items = [];
   state.playlistMeta = null;
   clearQueue();
-  showToast("Form reset.");
+  showToast("Form reset ho gaya.");
 }
 
 function setPlaylistSelection(selected) {
@@ -754,9 +754,9 @@ async function downloadItems(items) {
       });
       pollJob(item.id, job.job_id);
     });
-    showToast(`${items.length} download request${items.length === 1 ? "" : "s"} sent.`);
+    showToast(`${items.length} download request bhej diya gaya.`);
   } catch (error) {
-    showToast(error.message || "Could not start the download.", "error");
+    showToast(error.message || "Download start nahi ho paya.", "error");
   }
 }
 

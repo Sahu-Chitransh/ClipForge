@@ -8,7 +8,6 @@ Clipforge is a FastAPI + yt-dlp based YouTube media downloader SPA.
 - Video and audio downloads
 - Metadata fetch for title, duration, thumbnail, and quality support
 - Playlist bulk presets for format and quality/bitrate
-- Local/cloud backend selection
 - Live backend health indicator
 - List and card queue views
 - Audio downloads with embedded thumbnail artwork
@@ -66,6 +65,5 @@ Clipforge is a FastAPI + yt-dlp based YouTube media downloader SPA.
 
 ## Notes
 
-- Cloud backend mode expects a reachable HTTPS backend URL.
 - Local backend mode uses `http://127.0.0.1:8000`.
 - Audio files are saved as MP3 with embedded thumbnail artwork.

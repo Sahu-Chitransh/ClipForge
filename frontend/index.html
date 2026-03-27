@@ -101,7 +101,7 @@
             <div>
               <label id="apiBaseLabel" class="mb-2 block text-[10px] font-label uppercase tracking-widest text-on-surface-variant">Cloud Backend URL</label>
               <input id="apiBaseInput" class="w-full rounded-lg border border-outline-variant/30 bg-surface-container-low px-4 py-3 font-label text-sm text-on-surface focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary" placeholder="https://your-cloud-backend.example.com" type="text">
-              <p id="backendHint" class="mt-2 text-xs text-on-surface-variant">Select a backend source. Cloud mode uses the URL you enter here; localhost mode points to `http://127.0.0.1:8000`.</p>
+              <p id="backendHint" class="mt-2 text-xs text-on-surface-variant">Use the local backend running at `http://127.0.0.1:8000`.</p>
             </div>
           </div>
 
@@ -152,7 +152,7 @@
               </div>
               <p class="mt-3 text-xs text-on-surface-variant">Choose a format first, then pick one preset to apply it to every playlist item.</p>
             </div>
-            <p class="text-xs text-on-surface-variant">Load the playlist first, then choose the full playlist or selected videos from the sidebar.</p>
+            <p class="text-xs text-on-surface-variant">Load the playlist first, then choose full playlist or selected videos from the sidebar.</p>
             <div class="rounded-2xl border border-outline-variant/15 bg-surface-container-low px-4 py-3 text-sm text-on-surface-variant">
               <span class="font-semibold text-on-surface">Audio note:</span>
               Audio downloads are saved as MP3 files with the thumbnail embedded directly into the file.
@@ -287,23 +287,23 @@
     <div class="space-y-3 text-sm">
       <details class="faq-item rounded-2xl border border-outline-variant/15 bg-surface-container-low px-4 py-3">
         <summary class="cursor-pointer list-none font-semibold text-on-surface">Why does the backend show as offline?</summary>
-        <p class="mt-2 text-on-surface-variant">Select the correct URL in <code>Backend Source</code>. Local mode requires the backend to be running at <code>http://127.0.0.1:8000</code>, while cloud mode requires a valid HTTPS URL.</p>
+        <p class="mt-2 text-on-surface-variant">Make sure the backend is running at `http://127.0.0.1:8000` and that the frontend is opened on the same machine.</p>
       </details>
       <details class="faq-item rounded-2xl border border-outline-variant/15 bg-surface-container-low px-4 py-3">
-        <summary class="cursor-pointer list-none font-semibold text-on-surface">Why is the download not starting?</summary>
-        <p class="mt-2 text-on-surface-variant">Add the URL first and wait for metadata to load. Then use <code>Download to PC</code> or the item's <code>Download This</code> button. If it is a playlist, load the playlist first and then apply the bulk options.</p>
+        <summary class="cursor-pointer list-none font-semibold text-on-surface">Download start nahi ho raha?</summary>
+        <p class="mt-2 text-on-surface-variant">Pehle URL add karke metadata load hone do. Phir `Download to PC` ya item ke `Download This` button se request bhejo. Agar playlist hai to `Load Playlist` ke baad bulk options apply karo.</p>
       </details>
       <details class="faq-item rounded-2xl border border-outline-variant/15 bg-surface-container-low px-4 py-3">
-        <summary class="cursor-pointer list-none font-semibold text-on-surface">Why are 4K or 1080p options missing?</summary>
-        <p class="mt-2 text-on-surface-variant">Those resolutions appear only when metadata shows that the video supports them. The dropdown automatically filters out unavailable qualities for low-resolution videos.</p>
+        <summary class="cursor-pointer list-none font-semibold text-on-surface">4K/1080p option missing hai?</summary>
+        <p class="mt-2 text-on-surface-variant">Woh resolution sirf tab dikhega jab metadata us video ke liye support show kare. Low-resolution videos ke liye dropdown auto-filter hota hai.</p>
       </details>
       <details class="faq-item rounded-2xl border border-outline-variant/15 bg-surface-container-low px-4 py-3">
-        <summary class="cursor-pointer list-none font-semibold text-on-surface">How is the thumbnail added to audio files?</summary>
-        <p class="mt-2 text-on-surface-variant">Audio downloads are converted to MP3 and the thumbnail is embedded directly into the file metadata. No zip file is created.</p>
+        <summary class="cursor-pointer list-none font-semibold text-on-surface">Audio me thumbnail kaise aata hai?</summary>
+        <p class="mt-2 text-on-surface-variant">Audio downloads MP3 me convert hote hain aur thumbnail usi file ke metadata me embed hota hai. Zip file nahi banती.</p>
       </details>
       <details class="faq-item rounded-2xl border border-outline-variant/15 bg-surface-container-low px-4 py-3">
-        <summary class="cursor-pointer list-none font-semibold text-on-surface">How do I apply the same settings to every playlist item?</summary>
-        <p class="mt-2 text-on-surface-variant">Use the <code>Playlist Mod Menu</code> in the playlist tab. As soon as you choose a format and quality from the dropdowns, those settings are applied to all loaded links.</p>
+        <summary class="cursor-pointer list-none font-semibold text-on-surface">Playlist items par same settings kaise lagayein?</summary>
+        <p class="mt-2 text-on-surface-variant">Playlist tab me `Playlist Mod Menu` use karo. Format aur quality dropdown se select karte hi woh sab loaded links par apply ho jayega.</p>
       </details>
     </div>
   </section>
