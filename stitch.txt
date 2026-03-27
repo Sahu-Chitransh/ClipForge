@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Kinetic Utility | Pro Video Downloader</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Manrope:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              colors: {
+                "on-error-container": "#ffb2b9",
+                "inverse-primary": "#2949ef",
+                "inverse-surface": "#f9f9ff",
+                "secondary": "#9891fe",
+                "outline-variant": "#46484d",
+                "on-primary": "#001c8e",
+                "primary-dim": "#4963ff",
+                "surface-dim": "#0c0e12",
+                "on-surface": "#f6f6fc",
+                "primary": "#9ba8ff",
+                "on-secondary-fixed": "#2d1f8c",
+                "error": "#ff6e84",
+                "surface-bright": "#292c32",
+                "surface-tint": "#9ba8ff",
+                "primary-fixed": "#8999ff",
+                "surface-container": "#171a1f",
+                "on-tertiary-fixed": "#390030",
+                "secondary-fixed": "#d1ccff",
+                "primary-container": "#8999ff",
+                "on-primary-container": "#001470",
+                "surface-container-lowest": "#000000",
+                "outline": "#74757a",
+                "tertiary-dim": "#ea82ce",
+                "on-background": "#f6f6fc",
+                "background": "#0c0e12",
+                "on-error": "#490013",
+                "secondary-dim": "#9891fe",
+                "secondary-fixed-dim": "#c2bdff",
+                "on-tertiary-container": "#600653",
+                "on-secondary": "#170074",
+                "error-dim": "#d73357",
+                "on-secondary-container": "#d0cbff",
+                "on-primary-fixed": "#000000",
+                "on-tertiary": "#6d155d",
+                "on-primary-fixed-variant": "#001a88",
+                "surface-container-low": "#111318",
+                "on-surface-variant": "#aaabb0",
+                "secondary-container": "#40369f",
+                "surface-variant": "#23262c",
+                "on-secondary-fixed-variant": "#4a41aa",
+                "tertiary-fixed-dim": "#ea82ce",
+                "tertiary-container": "#f98fdc",
+                "surface-container-high": "#1d2025",
+                "surface": "#0c0e12",
+                "tertiary": "#ffa4e4",
+                "on-tertiary-fixed-variant": "#6c135c",
+                "inverse-on-surface": "#53555a",
+                "tertiary-fixed": "#f98fdc",
+                "primary-fixed-dim": "#778aff",
+                "error-container": "#a70138",
+                "surface-container-highest": "#23262c",
+                "brand-primary": "#3D5AFE"
+              },
+              fontFamily: {
+                "headline": ["Space Grotesk"],
+                "body": ["Manrope"],
+                "label": ["Inter"]
+              },
+              borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+            },
+          },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-header {
+            background: rgba(12, 14, 18, 0.7);
+            backdrop-filter: blur(20px);
+        }
+        .kinetic-gradient {
+            background: linear-gradient(135deg, #8999ff 0%, #9ba8ff 100%);
+        }
+        .neon-underline::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0%;
+            height: 2px;
+            background: #9ba8ff;
+            transition: width 0.3s ease;
+        }
+        .neon-underline-container:focus-within .neon-underline::after {
+            width: 100%;
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface font-body selection:bg-primary-container selection:text-on-primary-container">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-[#0c0e12]/70 backdrop-blur-xl shadow-[0_24px_24px_-12px_rgba(155,168,255,0.06)] flex justify-between items-center px-6 py-4 w-full">
+<div class="flex items-center gap-4">
+<span class="text-xl font-bold tracking-widest text-[#9ba8ff] uppercase font-['Space_Grotesk']">KINETIC UTILITY</span>
+</div>
+<div class="hidden md:flex items-center gap-8 font-['Space_Grotesk'] tracking-tight">
+<a class="text-[#9ba8ff] hover:text-[#ffa4e4] transition-colors duration-300" href="#">Downloader</a>
+<a class="text-[#aaabb0] hover:text-[#ffa4e4] transition-colors duration-300" href="#">Library</a>
+<a class="text-[#aaabb0] hover:text-[#ffa4e4] transition-colors duration-300" href="#">Automation</a>
+</div>
+<div class="flex items-center gap-4">
+<button class="text-[#aaabb0] hover:text-[#ffa4e4] transition-colors duration-300 active:scale-95 transition-transform">
+<span class="material-symbols-outlined">history</span>
+</button>
+<button class="text-[#aaabb0] hover:text-[#ffa4e4] transition-colors duration-300 active:scale-95 transition-transform">
+<span class="material-symbols-outlined">settings</span>
+</button>
+<div class="w-8 h-8 rounded-full bg-surface-container-high overflow-hidden border border-outline-variant/15">
+<img alt="User profile" data-alt="professional male portrait with neutral expression and soft studio lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAVjECpKO5hUNsgq82iLyBRnjqD6lJG1W5v5FlxP3zQMUhpIVzaiGYYfylSOBpRU5VGy1exKTFMbSZtSF6Ia1h9rPKb9Rcge6lPnc3qFpvzwRjglDYPModMNB7NcSVCz4lIMw0lXy734CQjyR4fhNIq02F7VVGL8C3fbAdOALwgqB0qzRb7G51N4dT9JOXtTJxthzbHswu-rskoXaFzJ5vYmLbfv-xdwAS18frre-PW6TesAtiCR5yM9WMtvw3ff2lm_zBn7kSkEuk"/>
+</div>
+</div>
+</header>
+<main class="pt-24 pb-32 px-4 md:px-8 max-w-6xl mx-auto">
+<!-- Hero & Input Area -->
+<section class="mb-16 mt-12 text-center md:text-left">
+<h1 class="font-headline text-4xl md:text-6xl font-bold mb-4 tracking-tight">
+                High-Performance <span class="text-primary italic">Media</span> Extraction.
+            </h1>
+<p class="text-on-surface-variant max-w-2xl mb-12">The professional instrument for bulk media acquisition. Paste any link to initialize the kinetic engine.</p>
+<div class="relative flex flex-col md:flex-row gap-4 items-stretch neon-underline-container">
+<div class="relative flex-grow group">
+<span class="absolute left-4 top-1/2 -translate-y-1/2 text-outline material-symbols-outlined">link</span>
+<input class="w-full bg-surface-container-lowest border-none py-6 pl-12 pr-4 text-lg font-headline placeholder:text-outline focus:ring-0 focus:bg-surface-container-highest transition-all duration-300 neon-underline" placeholder="Paste URL (YouTube, Vimeo, Twitch...)" type="text"/>
+</div>
+<button class="kinetic-gradient text-on-primary-container px-8 py-4 rounded-md font-headline font-bold flex items-center justify-center gap-2 hover:shadow-[0_0_20px_rgba(155,168,255,0.4)] transition-all active:scale-95">
+<span class="material-symbols-outlined">add_circle</span>
+                    ADD TO QUEUE
+                </button>
+</div>
+</section>
+<!-- Batch Download Queue -->
+<section class="space-y-6">
+<div class="flex items-center justify-between mb-8">
+<h2 class="font-headline text-xl font-medium flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">queue_play_next</span>
+                    ACTIVE QUEUE <span class="text-on-surface-variant font-normal text-sm px-2 py-0.5 bg-surface-container rounded-full">3 ITEMS</span>
+</h2>
+<button class="text-error text-sm font-label flex items-center gap-1 hover:bg-error/10 px-3 py-1.5 rounded-full transition-colors">
+<span class="material-symbols-outlined text-sm">delete_sweep</span>
+                    Clear Queue
+                </button>
+</div>
+<!-- Queue Items (Bento Style Cards) -->
+<div class="grid grid-cols-1 gap-6">
+<!-- Mock Item 1 -->
+<div class="group relative bg-surface-container rounded-xl overflow-hidden flex flex-col md:flex-row shadow-sm hover:shadow-lg transition-all duration-300 border-l-4 border-primary">
+<div class="md:w-64 h-48 md:h-auto overflow-hidden relative">
+<img alt="Video thumbnail" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" data-alt="vibrant abstract cinematic landscape with deep blues and purples" src="https://lh3.googleusercontent.com/aida-public/AB6AXuALrnAHOgiDqZNY63RcVmoyfgqeLTcV5ciDFYDBupqvUGUDtKirFtaeC6WQT4SV4lHX33TnhK_ua1qxqSdTHjap8nDWVWiC9IjZ-qaJiykxApDkP4yS137wjaJ2L6TPxN-5Mkr82snIiwLQXnefwxiwteKCNBiW7n9LvTg2KRQASg-tel6hjpgxwUWzLoxjDAiTe0gAM4meP4_ToNR6UsaBdW_8SRgAVNniSRVuqkeYN7Ohy2JmrEtv6K01yNovkpQpqlZDscXR3bQ"/>
+<div class="absolute bottom-2 right-2 bg-black/80 px-2 py-1 text-[10px] font-label text-white rounded">12:45</div>
+</div>
+<div class="flex-grow p-6 flex flex-col justify-between relative">
+<div class="flex justify-between items-start gap-4">
+<div>
+<h3 class="font-headline text-lg font-semibold text-on-surface mb-1 leading-tight">Mastering Cinematic Soundscapes in 2024</h3>
+<p class="text-on-surface-variant text-xs font-label">YouTube • Studio Pro Designs</p>
+</div>
+<button class="text-outline-variant hover:text-error transition-colors p-1">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<div class="mt-4 mb-4">
+<div class="flex justify-between items-center mb-1.5">
+<span class="text-[10px] font-label font-semibold text-brand-primary uppercase tracking-widest">Ready</span>
+<span class="text-[10px] font-label text-on-surface-variant">100%</span>
+</div>
+<div class="w-full h-1 bg-surface-container-low rounded-full overflow-hidden">
+<div class="h-full bg-brand-primary transition-all duration-500" style="width: 100%"></div>
+</div>
+</div>
+<div class="mt-2 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+<!-- Format Selector -->
+<div>
+<label class="text-[10px] font-label text-on-surface-variant uppercase tracking-widest block mb-2">Format</label>
+<div class="flex p-1 bg-surface-container-low rounded-lg">
+<button class="flex-1 py-1.5 text-xs font-medium rounded-md bg-secondary text-on-secondary shadow-sm">Video</button>
+<button class="flex-1 py-1.5 text-xs font-medium rounded-md text-on-surface-variant hover:text-on-surface">Audio</button>
+</div>
+</div>
+<!-- Quality Dropdown -->
+<div>
+<label class="text-[10px] font-label text-on-surface-variant uppercase tracking-widest block mb-2">Quality</label>
+<select class="w-full bg-surface-container-low border-none rounded-lg text-xs py-2 px-3 focus:ring-1 focus:ring-primary text-on-surface">
+<option>4K (Ultra HD)</option>
+<option selected="">1080p (Full HD)</option>
+<option>720p (HD)</option>
+<option>480p (SD)</option>
+</select>
+</div>
+<!-- Segment Toggle -->
+<div class="flex flex-col justify-end">
+<label class="flex items-center gap-2 cursor-pointer mb-2">
+<input class="rounded border-outline-variant bg-surface-container-low text-primary focus:ring-primary" type="checkbox"/>
+<span class="text-xs font-label text-on-surface-variant">Trim Segment</span>
+</label>
+</div>
+</div>
+</div>
+</div>
+<!-- Mock Item 2 -->
+<div class="group relative bg-surface-container rounded-xl overflow-hidden flex flex-col md:flex-row shadow-sm hover:shadow-lg transition-all duration-300 border-l-4 border-transparent hover:border-primary/30">
+<div class="md:w-64 h-48 md:h-auto overflow-hidden relative">
+<img alt="Video thumbnail" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" data-alt="aesthetic close-up of computer code on a dark screen with warm bokeh lights" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDIvBKOqRGyWPnlNUDvWlBm-a9mXfncotqm6trJbrzQJLQuHx19ASmlS_TkKvkAW2KyPcTQCX6TAjhypL7Ist8IEMug3clUF_xqD-YYH-l0wzWen6KWie680RmaV0lgoO8L8-QI_7mxgWKszLFb_aQ3RsneMloPz1Gp8g6ddpCrgVfL7WXXZOYUXEMjbwl1xqRHG2GWmb7clXYwFjhPz58MGP9_S_pWRI7n_NYLROIcLeNAP-hKxCsecsSXiu0dUS9GSEd-pTGCZVg"/>
+<div class="absolute bottom-2 right-2 bg-black/80 px-2 py-1 text-[10px] font-label text-white rounded">42:10</div>
+</div>
+<div class="flex-grow p-6 flex flex-col justify-between">
+<div class="flex justify-between items-start gap-4">
+<div>
+<h3 class="font-headline text-lg font-semibold text-on-surface mb-1 leading-tight">Advanced Tailwind CSS Architecture &amp; Best Practices</h3>
+<p class="text-on-surface-variant text-xs font-label">Vimeo • TechTalk Global</p>
+</div>
+<button class="text-outline-variant hover:text-error transition-colors p-1">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<div class="mt-4 mb-4">
+<div class="flex justify-between items-center mb-1.5">
+<span class="text-[10px] font-label font-semibold text-brand-primary uppercase tracking-widest animate-pulse">Downloading... 45%</span>
+<span class="text-[10px] font-label text-on-surface-variant">45%</span>
+</div>
+<div class="w-full h-1 bg-surface-container-low rounded-full overflow-hidden">
+<div class="h-full bg-brand-primary transition-all duration-500" style="width: 45%"></div>
+</div>
+</div>
+<div class="mt-2 flex flex-col gap-4">
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+<div>
+<label class="text-[10px] font-label text-on-surface-variant uppercase tracking-widest block mb-2">Format</label>
+<div class="flex p-1 bg-surface-container-low rounded-lg">
+<button class="flex-1 py-1.5 text-xs font-medium rounded-md text-on-surface-variant hover:text-on-surface">Video</button>
+<button class="flex-1 py-1.5 text-xs font-medium rounded-md bg-secondary text-on-secondary shadow-sm">Audio</button>
+</div>
+</div>
+<div>
+<label class="text-[10px] font-label text-on-surface-variant uppercase tracking-widest block mb-2">Bitrate</label>
+<select class="w-full bg-surface-container-low border-none rounded-lg text-xs py-2 px-3 focus:ring-1 focus:ring-primary text-on-surface"><option selected="">320 kbps (High)</option><option>256 kbps (Standard)</option><option>128 kbps (Mobile)</option></select>
+</div>
+<div class="flex flex-col justify-end">
+<label class="flex items-center gap-2 cursor-pointer mb-2">
+<input checked="" class="rounded border-outline-variant bg-surface-container-low text-primary focus:ring-primary" type="checkbox"/>
+<span class="text-xs font-label text-on-surface">Trim Segment</span>
+</label>
+</div>
+</div>
+<!-- Trim Inputs Expanded -->
+<div class="grid grid-cols-2 gap-4 pt-4 border-t border-outline-variant/10">
+<div>
+<label class="text-[10px] font-label text-on-surface-variant uppercase tracking-widest block mb-2">Start (HH:MM:SS)</label>
+<input class="w-full bg-surface-container-low border-none rounded-lg text-xs py-2 px-3 focus:ring-1 focus:ring-primary text-on-surface" type="text" value="00:05:30"/>
+</div>
+<div>
+<label class="text-[10px] font-label text-on-surface-variant uppercase tracking-widest block mb-2">End (HH:MM:SS)</label>
+<input class="w-full bg-surface-container-low border-none rounded-lg text-xs py-2 px-3 focus:ring-1 focus:ring-primary text-on-surface" type="text" value="00:15:00"/>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Mock Item 3 -->
+<div class="group relative bg-surface-container rounded-xl overflow-hidden flex flex-col md:flex-row shadow-sm hover:shadow-lg transition-all duration-300 border-l-4 border-transparent hover:border-primary/30 opacity-70">
+<div class="md:w-64 h-48 md:h-auto overflow-hidden relative">
+<img alt="Video thumbnail" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" data-alt="vintage electronics and game consoles arranged on a clean shelf with neon blue lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCo8HJ0dRtRUPXNQ3yIXoR2ANjqcIGe3nQHDk0gY-tZxyreKfkxtWHcvlH0OXN9a9JJ_D3EY7xia_W9KODvLjetKZLTncFQQdDN9c2aIcuAbsw-aoiu5SotSpYBWtrxJMNDFJMLwV_z-X0rYU59aYuQI-utxgIuzHetdU1YNoZqWYvmmjyVICVRXnsP8irGd_73aHDufBlpbP9BiQIDmqiR7_N_-HMaETrPvHA8ynvfhtrDrCQpV90UgagEpClkzZjUfZKoCU7mjgU"/>
+<div class="absolute bottom-2 right-2 bg-black/80 px-2 py-1 text-[10px] font-label text-white rounded">05:22</div>
+</div>
+<div class="flex-grow p-6 flex flex-col justify-between">
+<div class="flex justify-between items-start gap-4">
+<div>
+<h3 class="font-headline text-lg font-semibold text-on-surface mb-1 leading-tight">Retrogaming: The 16-bit Evolution</h3>
+<p class="text-on-surface-variant text-xs font-label">Twitch • GameVault</p>
+</div>
+<button class="text-outline-variant hover:text-error transition-colors p-1">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<div class="mt-4 mb-4">
+<div class="flex justify-between items-center mb-1.5">
+<span class="text-[10px] font-label font-semibold text-on-surface-variant uppercase tracking-widest">Waiting...</span>
+<span class="text-[10px] font-label text-on-surface-variant">0%</span>
+</div>
+<div class="w-full h-1 bg-surface-container-low rounded-full overflow-hidden">
+<div class="h-full bg-brand-primary/20 transition-all duration-500" style="width: 0%"></div>
+</div>
+</div>
+<div class="mt-2 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+<div>
+<label class="text-[10px] font-label text-on-surface-variant uppercase tracking-widest block mb-2">Format</label>
+<div class="flex p-1 bg-surface-container-low rounded-lg">
+<button class="flex-1 py-1.5 text-xs font-medium rounded-md bg-secondary text-on-secondary shadow-sm">Video</button>
+<button class="flex-1 py-1.5 text-xs font-medium rounded-md text-on-surface-variant hover:text-on-surface">Audio</button>
+</div>
+</div>
+<div>
+<label class="text-[10px] font-label text-on-surface-variant uppercase tracking-widest block mb-2">Quality</label>
+<select class="w-full bg-surface-container-low border-none rounded-lg text-xs py-2 px-3 focus:ring-1 focus:ring-primary text-on-surface">
+<option>4K</option>
+<option>1080p</option>
+<option selected="">720p</option>
+</select>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Empty State (Hidden for mock) -->
+<div class="hidden flex-col items-center justify-center py-20 text-center border-2 border-dashed border-outline-variant/20 rounded-2xl">
+<span class="material-symbols-outlined text-6xl text-outline-variant mb-4">cloud_download</span>
+<p class="font-headline text-xl text-on-surface">No videos added yet.</p>
+<p class="text-on-surface-variant text-sm mt-1">Paste a URL above to begin the batch process.</p>
+</div>
+</section>
+</main>
+<!-- Global Action Bar -->
+<footer class="fixed bottom-0 left-0 w-full z-50 bg-[#0c0e12]/80 backdrop-blur-lg border-t border-[#46484d]/15 shadow-2xl shadow-[#9ba8ff]/10">
+<div class="max-w-6xl mx-auto px-6 py-4 flex flex-col md:flex-row items-center justify-between gap-4">
+<div class="hidden md:flex items-center gap-6">
+<div class="flex flex-col">
+<span class="text-[10px] uppercase tracking-widest text-[#aaabb0] font-['Inter']">Total Size (Est.)</span>
+<span class="text-on-surface font-headline font-bold">1.24 GB</span>
+</div>
+<div class="h-8 w-[1px] bg-outline-variant/30"></div>
+<div class="flex flex-col">
+<span class="text-[10px] uppercase tracking-widest text-[#aaabb0] font-['Inter']">Storage Path</span>
+<span class="text-on-surface font-headline font-bold flex items-center gap-1">
+                        /Downloads/Kinetic <span class="material-symbols-outlined text-sm">edit</span>
+</span>
+</div>
+</div>
+<div class="flex items-center gap-4 w-full md:w-auto">
+<button class="flex-1 md:flex-none flex items-center justify-center gap-2 px-6 py-3 rounded-lg border border-outline-variant/30 text-on-surface hover:bg-surface-container-high transition-all font-headline font-medium active:scale-95">
+<span class="material-symbols-outlined text-sm">settings_backup_restore</span>
+                    Reset Form
+                </button>
+<button class="flex-[2] md:flex-none kinetic-gradient text-on-primary-container px-10 py-3 rounded-lg font-headline font-bold flex items-center justify-center gap-2 hover:shadow-[0_0_25px_rgba(155,168,255,0.4)] transition-all active:scale-95">
+<span class="material-symbols-outlined">rocket_launch</span>
+                    DOWNLOAD ALL (3 ITEMS)
+                </button>
+</div>
+</div>
+</footer>
+<!-- Mobile Navigation Shell -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full flex justify-around items-center p-4 bg-[#0c0e12]/80 backdrop-blur-lg border-t border-[#46484d]/15 z-50">
+<div class="flex flex-col items-center justify-center bg-[#9ba8ff]/10 text-[#9ba8ff] rounded-xl px-6 py-2">
+<span class="material-symbols-outlined">queue_play_next</span>
+<span class="font-['Inter'] text-[10px] uppercase tracking-widest">Queue</span>
+</div>
+<div class="flex flex-col items-center justify-center text-[#aaabb0] px-6 py-2 hover:bg-[#1d2025]">
+<span class="material-symbols-outlined">sync</span>
+<span class="font-['Inter'] text-[10px] uppercase tracking-widest">Active</span>
+</div>
+<div class="flex flex-col items-center justify-center text-[#aaabb0] px-6 py-2 hover:bg-[#1d2025]">
+<span class="material-symbols-outlined">check_circle</span>
+<span class="font-['Inter'] text-[10px] uppercase tracking-widest">Finished</span>
+</div>
+</nav>
+</body></html>

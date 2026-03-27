@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kinetic Utility | Pro Video Downloader</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Manrope:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "brand-primary": "#3D5AFE",
+            "background": "#0c0e12",
+            "surface": "#0c0e12",
+            "surface-container": "#171a1f",
+            "surface-container-low": "#111318",
+            "surface-container-high": "#1d2025",
+            "surface-container-highest": "#23262c",
+            "surface-container-lowest": "#000000",
+            "surface-variant": "#23262c",
+            "primary": "#9ba8ff",
+            "primary-container": "#8999ff",
+            "secondary": "#9891fe",
+            "tertiary": "#ffa4e4",
+            "outline": "#74757a",
+            "outline-variant": "#46484d",
+            "on-surface": "#f6f6fc",
+            "on-surface-variant": "#aaabb0",
+            "on-primary-container": "#001470",
+            "on-secondary": "#170074",
+            "error": "#ff6e84"
+          },
+          fontFamily: {
+            headline: ["Space Grotesk"],
+            body: ["Manrope"],
+            label: ["Inter"]
+          }
+        }
+      }
+    };
+  </script>
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body class="bg-surface text-on-surface font-body selection:bg-primary-container selection:text-on-primary-container">
+  <header class="fixed top-0 z-50 w-full border-b border-outline-variant/15 bg-[#0c0e12]/70 px-6 py-4 backdrop-blur-xl">
+    <div class="mx-auto flex max-w-7xl items-center justify-between gap-4">
+      <div class="flex items-center gap-4">
+        <span class="font-headline text-xl font-bold uppercase tracking-[0.25em] text-primary">KINETIC UTILITY</span>
+      </div>
+      <div class="hidden items-center gap-8 font-headline tracking-tight md:flex">
+        <a class="text-primary transition-colors duration-300 hover:text-tertiary" href="#">Downloader</a>
+        <a class="text-on-surface-variant transition-colors duration-300 hover:text-tertiary" href="#">Library</a>
+        <a class="text-on-surface-variant transition-colors duration-300 hover:text-tertiary" href="#">Automation</a>
+      </div>
+      <div class="flex items-center gap-4">
+        <button id="historyButton" class="text-on-surface-variant transition-colors duration-300 hover:text-tertiary">
+          <span class="material-symbols-outlined">history</span>
+        </button>
+        <button id="settingsButton" class="text-on-surface-variant transition-colors duration-300 hover:text-tertiary">
+          <span class="material-symbols-outlined">settings</span>
+        </button>
+        <div class="h-8 w-8 overflow-hidden rounded-full border border-outline-variant/15 bg-surface-container-high"></div>
+      </div>
+    </div>
+  </header>
+
+  <main class="mx-auto max-w-7xl px-4 pb-10 pt-24 md:px-8">
+    <div class="grid gap-8 lg:grid-cols-[minmax(0,1fr)_340px]">
+      <section class="space-y-8">
+        <section class="mt-12 text-center md:text-left">
+          <h1 class="mb-4 font-headline text-4xl font-bold tracking-tight md:text-6xl">
+            High-Performance <span class="italic text-primary">Media</span> Extraction.
+          </h1>
+          <p class="mb-6 max-w-2xl text-on-surface-variant">
+            Paste single videos or playlist links, inspect metadata instantly, and download video or audio with optional subtitles and timestamp trimming.
+          </p>
+        </section>
+
+        <section class="rounded-3xl border border-outline-variant/15 bg-[linear-gradient(180deg,rgba(255,255,255,0.02),rgba(255,255,255,0.005))] p-4 shadow-[0_40px_80px_-40px_rgba(155,168,255,0.15)] md:p-6">
+          <div class="mb-5 flex flex-wrap gap-3">
+            <button id="tabSingleButton" class="tab-button active-tab rounded-full px-5 py-2 text-sm font-headline font-semibold" type="button">Single Video Queue</button>
+            <button id="tabPlaylistButton" class="tab-button rounded-full px-5 py-2 text-sm font-headline font-semibold" type="button">Playlist Downloader</button>
+          </div>
+
+          <div class="mb-5 grid gap-3 md:grid-cols-[260px_1fr]">
+            <div>
+              <label class="mb-2 block text-[10px] font-label uppercase tracking-widest text-on-surface-variant">Backend Source</label>
+              <select id="backendModeSelect" class="w-full rounded-lg border border-outline-variant/30 bg-surface-container-low px-4 py-3 font-label text-sm text-on-surface focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary">
+                <option value="cloud">Cloud hosted backend</option>
+                <option value="local">Localhost backend</option>
+              </select>
+            </div>
+            <div>
+              <label id="apiBaseLabel" class="mb-2 block text-[10px] font-label uppercase tracking-widest text-on-surface-variant">Cloud Backend URL</label>
+              <input id="apiBaseInput" class="w-full rounded-lg border border-outline-variant/30 bg-surface-container-low px-4 py-3 font-label text-sm text-on-surface focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary" placeholder="https://your-cloud-backend.example.com" type="text">
+              <p id="backendHint" class="mt-2 text-xs text-on-surface-variant">Select a backend source. Cloud mode uses the URL you enter here; localhost mode points to `http://127.0.0.1:8000`.</p>
+            </div>
+          </div>
+
+          <div id="toast" class="hidden rounded-lg border px-4 py-3 text-sm font-label"></div>
+
+          <div id="singlePanel" class="space-y-4">
+            <div class="relative flex flex-col gap-4 md:flex-row">
+              <div class="relative flex-grow">
+                <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline">link</span>
+                <textarea id="urlInput" class="min-h-[116px] w-full rounded-2xl border-none bg-surface-container-lowest py-5 pl-12 pr-4 text-lg font-headline placeholder:text-outline focus:bg-surface-container-highest focus:ring-1 focus:ring-primary" placeholder="Paste one or more YouTube URLs, one per line"></textarea>
+              </div>
+              <button id="addQueueButton" class="kinetic-gradient rounded-2xl px-8 py-4 font-headline font-bold text-on-primary-container transition-all hover:shadow-[0_0_20px_rgba(155,168,255,0.4)]">
+                <span class="inline-flex items-center gap-2">
+                  <span class="material-symbols-outlined">add_circle</span>
+                  ADD TO QUEUE
+                </span>
+              </button>
+            </div>
+          </div>
+
+          <div id="playlistPanel" class="hidden space-y-4">
+            <div class="grid gap-4 md:grid-cols-[1fr_auto]">
+              <div class="relative">
+                <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline">playlist_play</span>
+                <input id="playlistUrlInput" class="w-full rounded-2xl border-none bg-surface-container-lowest py-4 pl-12 pr-4 font-headline text-base placeholder:text-outline focus:bg-surface-container-highest focus:ring-1 focus:ring-primary" placeholder="Paste playlist URL here">
+              </div>
+              <button id="loadPlaylistButton" class="rounded-2xl border border-primary/20 px-6 py-4 font-headline font-bold text-primary transition-colors hover:bg-primary/10" type="button">
+                Load Playlist
+              </button>
+            </div>
+            <p class="text-xs text-on-surface-variant">Load the playlist first, then choose full playlist or selected videos from the sidebar.</p>
+            <div class="rounded-2xl border border-outline-variant/15 bg-surface-container-low px-4 py-3 text-sm text-on-surface-variant">
+              <span class="font-semibold text-on-surface">Audio note:</span>
+              Audio downloads are saved as MP3 files with the thumbnail embedded directly into the file.
+            </div>
+          </div>
+        </section>
+
+        <section class="space-y-6">
+          <div class="mb-2 flex items-center justify-between gap-4">
+            <h2 class="flex items-center gap-3 font-headline text-xl font-medium">
+              <span class="material-symbols-outlined text-primary">queue_play_next</span>
+              <span id="activeQueueTitle">ACTIVE QUEUE</span>
+              <span id="queueCount" class="rounded-full bg-surface-container px-2 py-0.5 text-sm font-normal text-on-surface-variant">0 ITEMS</span>
+            </h2>
+            <button id="clearQueueButton" class="flex items-center gap-1 rounded-full px-3 py-1.5 text-sm font-label text-error transition-colors hover:bg-error/10">
+              <span class="material-symbols-outlined text-sm">delete_sweep</span>
+              Clear Queue
+            </button>
+          </div>
+
+          <div id="playlistSummary" class="hidden rounded-2xl border border-outline-variant/15 bg-surface-container px-4 py-3 text-sm text-on-surface-variant"></div>
+
+          <div id="queueList" class="grid grid-cols-1 gap-6"></div>
+
+          <div id="emptyState" class="flex flex-col items-center justify-center rounded-2xl border-2 border-dashed border-outline-variant/20 py-20 text-center">
+            <span class="material-symbols-outlined mb-4 text-6xl text-outline-variant">cloud_download</span>
+            <p class="font-headline text-xl text-on-surface">No videos added yet.</p>
+            <p class="mt-1 text-sm text-on-surface-variant">Paste a URL above to begin the batch process.</p>
+          </div>
+        </section>
+      </section>
+
+      <aside class="lg:sticky lg:top-24 h-fit space-y-4">
+        <section class="rounded-3xl border border-outline-variant/15 bg-surface-container/95 p-5 shadow-[0_30px_60px_-30px_rgba(0,0,0,0.55)]">
+          <div class="mb-4 flex items-center gap-2">
+            <span class="material-symbols-outlined text-primary">tune</span>
+            <h3 class="font-headline text-lg font-semibold">Actions</h3>
+          </div>
+
+          <button id="primaryDownloadButton" class="kinetic-gradient mb-3 w-full rounded-2xl px-5 py-4 text-left font-headline font-bold text-on-primary-container transition-all hover:shadow-[0_0_24px_rgba(155,168,255,0.4)]" type="button">
+            <span id="downloadAllLabel" class="block text-base">DOWNLOAD TO PC (0 ITEMS)</span>
+            <span id="primaryDownloadHint" class="block text-xs font-normal opacity-80">Download the visible queue</span>
+          </button>
+
+          <button id="secondaryDownloadButton" class="hidden w-full rounded-2xl border border-primary/20 px-5 py-4 text-left font-headline font-bold text-primary transition-colors hover:bg-primary/10" type="button">
+            <span id="secondaryDownloadLabel" class="block text-base">SAVE FILES TO PC</span>
+            <span class="block text-xs font-normal opacity-80">Download completed files locally</span>
+          </button>
+
+          <label id="selectAllPlaylistWrap" class="hidden mt-4 flex items-center gap-2 rounded-2xl border border-outline-variant/15 bg-surface-container-low px-4 py-3">
+            <input id="selectAllPlaylistCheckbox" class="rounded border-outline-variant bg-surface-container-low text-primary focus:ring-primary" type="checkbox">
+            <span class="text-sm">Select all playlist videos</span>
+          </label>
+        </section>
+
+        <section class="rounded-3xl border border-outline-variant/15 bg-surface-container/95 p-5">
+          <div class="mb-4 flex items-center gap-2">
+            <span class="material-symbols-outlined text-primary">info</span>
+            <h3 class="font-headline text-lg font-semibold">Status</h3>
+          </div>
+          <div class="space-y-4 text-sm">
+            <div>
+              <span class="block text-[10px] uppercase tracking-widest text-on-surface-variant">Queue Summary</span>
+              <span id="summaryText" class="mt-1 block font-headline text-base font-bold text-on-surface">0 items ready</span>
+            </div>
+            <div class="h-px bg-outline-variant/20"></div>
+            <div>
+              <span class="block text-[10px] uppercase tracking-widest text-on-surface-variant">Backend</span>
+              <div class="mt-1 flex items-center gap-2">
+                <span id="backendStatusLight" class="h-2.5 w-2.5 rounded-full bg-[#f87171] shadow-[0_0_12px_rgba(248,113,113,0.6)]"></span>
+                <span id="backendText" class="block font-headline text-base font-bold text-on-surface">Current origin</span>
+              </div>
+              <span id="backendStatusText" class="mt-1 block text-xs text-on-surface-variant">Checking backend...</span>
+            </div>
+            <div class="h-px bg-outline-variant/20"></div>
+            <div>
+              <span class="block text-[10px] uppercase tracking-widest text-on-surface-variant">Playlist</span>
+              <span id="playlistTitleText" class="mt-1 block font-headline text-base font-bold text-on-surface">No playlist loaded</span>
+            </div>
+          </div>
+        </section>
+
+        <section class="rounded-3xl border border-outline-variant/15 bg-surface-container/95 p-5">
+          <div class="mb-4 flex items-center gap-2">
+            <span class="material-symbols-outlined text-primary">settings_backup_restore</span>
+            <h3 class="font-headline text-lg font-semibold">Utility</h3>
+          </div>
+          <div class="space-y-3">
+            <button id="resetFormButton" class="w-full rounded-2xl border border-outline-variant/30 px-5 py-4 font-headline font-medium text-on-surface transition-all hover:bg-surface-container-high" type="button">
+              Reset Form
+            </button>
+            <button id="clearQueueButton" class="w-full rounded-2xl border border-error/20 px-5 py-4 font-headline font-medium text-error transition-all hover:bg-error/10" type="button">
+              Clear Queue
+            </button>
+          </div>
+        </section>
+      </aside>
+    </div>
+  </main>
+
+  <template id="queueItemTemplate">
+    <article class="queue-card group relative overflow-hidden rounded-xl border-l-4 border-transparent bg-surface-container shadow-sm transition-all duration-300 hover:shadow-lg">
+      <div class="flex flex-col md:flex-row">
+        <div class="relative h-48 overflow-hidden bg-surface-container-high md:h-auto md:w-64">
+          <img class="item-thumbnail hidden h-full w-full object-cover" alt="Video thumbnail">
+          <div class="item-thumbnail-fallback flex h-full w-full items-center justify-center bg-[radial-gradient(circle_at_top,#8999ff33,transparent_60%),linear-gradient(145deg,#151821,#0b0d11)]">
+            <span class="material-symbols-outlined text-6xl text-primary/70">movie</span>
+          </div>
+          <div class="absolute bottom-2 right-2 rounded bg-black/80 px-2 py-1 text-[10px] font-label text-white item-duration">Queued</div>
+        </div>
+        <div class="flex-grow p-6">
+          <div class="flex items-start justify-between gap-4">
+            <div class="min-w-0">
+              <h3 class="item-title mb-1 line-clamp-2 font-headline text-lg font-semibold text-on-surface break-all"></h3>
+              <p class="item-subtitle text-xs font-label text-on-surface-variant"></p>
+              <p class="item-meta text-xs font-label text-on-surface-variant"></p>
+            </div>
+            <div class="flex items-center gap-2">
+              <label class="item-select-wrap hidden items-center gap-2 rounded-full border border-outline-variant/15 bg-surface-container-low px-3 py-1.5 text-xs">
+                <input class="item-select rounded border-outline-variant bg-surface-container-low text-primary focus:ring-primary" type="checkbox">
+                <span>Select</span>
+              </label>
+              <button class="remove-item p-1 text-outline-variant transition-colors hover:text-error" type="button">
+                <span class="material-symbols-outlined">close</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="mb-4 mt-4">
+            <div class="mb-1.5 flex items-center justify-between">
+              <span class="item-status text-[10px] font-label font-semibold uppercase tracking-widest text-brand-primary">Ready</span>
+              <span class="item-progress-text text-[10px] font-label text-on-surface-variant">0%</span>
+            </div>
+            <div class="h-1 w-full overflow-hidden rounded-full bg-surface-container-low">
+              <div class="item-progress-bar h-full bg-brand-primary transition-all duration-500" style="width: 0%"></div>
+            </div>
+          </div>
+
+          <div class="flex flex-col gap-4">
+            <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+              <div>
+                <label class="mb-2 block text-[10px] font-label uppercase tracking-widest text-on-surface-variant">Format</label>
+                <div class="flex rounded-lg bg-surface-container-low p-1">
+                  <button class="format-button active-format flex-1 rounded-md py-1.5 text-xs font-medium" data-format="video" type="button">Video</button>
+                  <button class="format-button flex-1 rounded-md py-1.5 text-xs font-medium" data-format="audio" type="button">Audio</button>
+                </div>
+              </div>
+
+              <div>
+                <label class="quality-label mb-2 block text-[10px] font-label uppercase tracking-widest text-on-surface-variant">Quality</label>
+                <select class="quality-select w-full rounded-lg border-none bg-surface-container-low px-3 py-2 text-xs text-on-surface focus:ring-1 focus:ring-primary"></select>
+              </div>
+
+              <div class="flex flex-col justify-end">
+                <label class="mb-2 flex cursor-pointer items-center gap-2">
+                  <input class="trim-toggle rounded border-outline-variant bg-surface-container-low text-primary focus:ring-primary" type="checkbox">
+                  <span class="text-xs font-label text-on-surface-variant">Trim Segment</span>
+                </label>
+              </div>
+
+              <div class="flex flex-col justify-end">
+                <button class="download-now rounded-lg border border-primary/20 px-3 py-2 text-xs font-headline font-semibold text-primary transition-colors hover:bg-primary/10" type="button">
+                  Download This
+                </button>
+              </div>
+            </div>
+
+            <div class="trim-grid hidden grid-cols-2 gap-4 border-t border-outline-variant/10 pt-4">
+              <div>
+                <label class="mb-2 block text-[10px] font-label uppercase tracking-widest text-on-surface-variant">Start (HH:MM:SS)</label>
+                <input class="start-time w-full rounded-lg border-none bg-surface-container-low px-3 py-2 text-xs text-on-surface focus:ring-1 focus:ring-primary" placeholder="00:00:00" type="text">
+              </div>
+              <div>
+                <label class="mb-2 block text-[10px] font-label uppercase tracking-widest text-on-surface-variant">End (HH:MM:SS)</label>
+                <input class="end-time w-full rounded-lg border-none bg-surface-container-low px-3 py-2 text-xs text-on-surface focus:ring-1 focus:ring-primary" placeholder="00:00:30" type="text">
+              </div>
+            </div>
+
+            <div class="item-actions hidden flex flex-wrap items-center gap-3">
+              <a class="download-link rounded-lg bg-secondary px-4 py-2 text-sm font-headline font-semibold text-on-secondary" download>Download File</a>
+              <span class="filename text-xs font-label text-on-surface-variant"></span>
+            </div>
+
+            <p class="item-error hidden rounded-lg border border-error/20 bg-error/10 px-3 py-2 text-xs font-label text-error"></p>
+          </div>
+        </div>
+      </div>
+    </article>
+  </template>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>
